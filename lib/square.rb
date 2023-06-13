@@ -10,4 +10,8 @@ class Square
     @column = column
     @piece_on_square = piece_on_square
   end
+
+  def update_piece(piece)
+    @piece_on_square = piece
+  end
 end

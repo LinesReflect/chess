@@ -2,9 +2,11 @@
 
 require_relative 'board'
 require_relative 'player'
+require_relative 'piece_creator'
 require 'colorize'
 
 class Game
+  include PieceCreator
   attr_reader :board
 
   def initialize(player1 = Player.new(1), player2 = Player.new(2), board = Board.new)
@@ -19,6 +21,8 @@ class Game
     player_names
     player_colors
     puts "#{@player1.name} will control #{@player1.color} pieces and #{@player2.name} controls the #{@player2.color} pieces."
+    create_pieces
+    @board.display_board
   end
 
   def game_greeting
