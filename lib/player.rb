@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 
 class Player
-  attr_reader :number, :name, :color
+  attr_reader :number, :name, :color, :pieces_in_play, :pieces_with_moves
 
   def initialize(number)
     @number = number
     @name = nil
     @color = nil
+    @pieces_in_play = []
+    @pieces_with_moves = []
   end
 
   def player_name(opponent_name = nil)
@@ -36,5 +38,9 @@ class Player
       redo unless [1, 2].include?(input)
       return @color = input == 1 ? 'white' : 'black'
     end
+  end
+
+  def add_piece(piece)
+    @pieces.push(piece)
   end
 end
