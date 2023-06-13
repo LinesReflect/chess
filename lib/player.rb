@@ -41,6 +41,6 @@ class Player
   end
 
   def add_piece(piece)
-    @pieces.push(piece)
+    @pieces_in_play.push(piece)
   end
 end
