@@ -9,98 +9,68 @@ require_relative 'queen'
 require_relative 'king'
 
 module PieceCreator
-  def create_pieces
-    create_pawns
-    create_rooks
-    create_kinghts
-    create_bishops
-    create_queens
-    create_kings
+  def create_pieces(player)
+    create_pawns(player)
+    create_rooks(player)
+    create_kinghts(player)
+    create_bishops(player)
+    create_queens(player)
+    create_kings(player)
   end
 
-  def create_pawns
-    player = @player1.color == 'white' ? @player1 : @player2
+  def create_pawns(player)
+    current_square = player.color == 'white' ? 8 : 48
     i = 1
-    current_white = 8
-    current_black = 48
-    while i < 17
-      if i < 9
-        Pawn.new(player, player.color, @board.squares[current_white]).claim_square
-        current_white += 1
-      else
-        player = @player1 ? @player2 : @player1
-        Pawn.new(player, player.color, @board.squares[current_black]).claim_square
-        current_black += 1
-      end
+    while i < 9
+      piece = Pawn.new(player, player.color, @board.squares[current_square]).claim_square
+      player.add_piece(piece)
+      current_square += 1
       i += 1
     end
   end
 
-  def create_rooks
-    player = @player1.color == 'white' ? @player1 : @player2
+  def create_rooks(player)
+    current_square = player.color == 'white' ? 0 : 56
     i = 1
-    current_white = 0
-    current_black = 56
-    while i < 5
-      if i < 3
-        Rook.new(player, player.color, @board.squares[current_white]).claim_square
-        current_white += 7
-      else
-        player = @player1 ? @player2 : @player1
-        Rook.new(player, player.color, @board.squares[current_black]).claim_square
-        current_black += 7
-      end
+    while i < 3
+      piece = Rook.new(player, player.color, @board.squares[current_square]).claim_square
+      current_square += 7
+      player.add_piece(piece)
       i += 1
     end
   end
 
-  def create_kinghts
-    player = @player1.color == 'white' ? @player1 : @player2
+  def create_kinghts(player)
+    current_square = player.color == 'white' ? 1 : 57
     i = 1
-    current_white = 1
-    current_black = 57
-    while i < 5
-      if i < 3
-        Knight.new(player, player.color, @board.squares[current_white]).claim_square
-        current_white += 5
-      else
-        player = @player1 ? @player2 : @player1
-        Knight.new(player, player.color, @board.squares[current_black]).claim_square
-        current_black += 5
-      end
+    while i < 3
+      piece = Knight.new(player, player.color, @board.squares[current_square]).claim_square
+      player.add_piece(piece)
+      current_square += 5
       i += 1
     end
   end
 
-  def create_bishops
-    player = @player1.color == 'white' ? @player1 : @player2
+  def create_bishops(player)
+    current_square = player.color == 'white' ? 2 : 58
     i = 1
-    current_white = 2
-    current_black = 58
-    while i < 5
-      if i < 3
-        Bishop.new(player, player.color, @board.squares[current_white]).claim_square
-        current_white += 3
-      else
-        player = @player1 ? @player2 : @player1
-        Bishop.new(player, player.color, @board.squares[current_black]).claim_square
-        current_black += 3
-      end
+    while i < 3
+      piece = Bishop.new(player, player.color, @board.squares[current_square]).claim_square
+      player.add_piece(piece)
+      current_square += 3
       i += 1
     end
   end
 
-  def create_queens
-    player = @player1.color == 'white' ? @player1 : @player2
-    Queen.new(player, player.color, @board.squares[3]).claim_square
-    player = @player1 ? @player2 : @player1
-    Queen.new(player, player.color, @board.squares[59]).claim_square
+  def create_queens(player)
+    current_square = player.color == 'white' ? 3 : 59
+    piece = Queen.new(player, player.color, @board.squares[current_square]).claim_square
+    player.add_piece(piece)
   end
 
-  def create_kings
-    player = @player1.color == 'white' ? @player1 : @player2
-    King.new(player, player.color, @board.squares[4]).claim_square
-    player = @player1 ? @player2 : @player1
-    King.new(player, player.color, @board.squares[60]).claim_square
+  def create_kings(player)
+    current_square = player.color == 'white' ? 4 : 60
+    piece = King.new(player, player.color, @board.squares[current_square]).claim_square
+    player.add_piece(piece)
   end
 end

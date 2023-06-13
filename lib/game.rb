@@ -21,7 +21,8 @@ class Game
     player_names
     player_colors
     puts "#{@player1.name} will control #{@player1.color} pieces and #{@player2.name} controls the #{@player2.color} pieces."
-    create_pieces
+    create_pieces(@player1)
+    create_pieces(@player2)
     @board.display_board
   end
 
