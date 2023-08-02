@@ -33,7 +33,7 @@ class Player
     return @color = opponent_color == 'white' ? 'black' : 'white' unless opponent_color.nil?
 
     loop do 
-      puts "#{@name}, press 1 to use white pieces or 2 for black pieces."
+      puts "#{@name}, press 1 to use white(solid) pieces or 2 for black(clear) pieces."
       input = gets.chomp.to_i
       redo unless [1, 2].include?(input)
       return @color = input == 1 ? 'white' : 'black'
@@ -42,5 +42,24 @@ class Player
 
   def add_piece(piece)
     @pieces_in_play.push(piece)
+  end
+
+  def possible_moves(board)
+    @pieces_with_moves = []
+    @pieces_in_play.each do |piece|
+      piece.find_moves(piece.current_square, board)
+      next if piece.moves.empty?
+      @pieces_with_moves.push(piece)
+    end
+    print_moves
+  end
+
+  def print_moves
+    i = 0
+    while i < @pieces_with_moves.length
+      print "#{i + 1}.#{pieces_with_moves[i].current_square.rank_and_file}"
+      i == @pieces_with_moves.length - 1 ? print("\n") : print(' ')
+      i += 1
+    end
   end
 end
