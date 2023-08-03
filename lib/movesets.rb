@@ -23,9 +23,10 @@ module Movesets
       current_square = board.squares.select { |square| square.coords == [current_square.column + 1, current_square.row]}
       current_square = current_square[0]
       return if current_square.nil?
-      return unless current_square.piece_on_square.nil?
+      return if !current_square.piece_on_square.nil? && current_square.piece_on_square.player == @player
 
       @moves.push(current_square)
+      return unless current_square.piece_on_square.nil?
       return if king
     end
   end
@@ -35,9 +36,10 @@ module Movesets
       current_square = board.squares.select { |square| square.coords == [current_square.column - 1, current_square.row]}
       current_square = current_square[0]
       return if current_square.nil?
-      return unless current_square.piece_on_square.nil?
+      return if !current_square.piece_on_square.nil? && current_square.piece_on_square.player == @player
 
       @moves.push(current_square)
+      return unless current_square.piece_on_square.nil?
       return if king
     end
   end
@@ -47,9 +49,10 @@ module Movesets
       current_square = board.squares.select { |square| square.coords == [current_square.column, current_square.row + 1]}
       current_square = current_square[0]
       return if current_square.nil?
-      return unless current_square.piece_on_square.nil?
+      return if !current_square.piece_on_square.nil? && current_square.piece_on_square.player == @player
 
       @moves.push(current_square)
+      return unless current_square.piece_on_square.nil?
       return if king
     end
   end
@@ -59,9 +62,10 @@ module Movesets
       current_square = board.squares.select { |square| square.coords == [current_square.column, current_square.row - 1]}
       current_square = current_square[0]
       return if current_square.nil?
-      return unless current_square.piece_on_square.nil?
+      return if !current_square.piece_on_square.nil? && current_square.piece_on_square.player == @player
 
       @moves.push(current_square)
+      return unless current_square.piece_on_square.nil?
       return if king
     end
   end
@@ -71,9 +75,10 @@ module Movesets
       current_square = board.squares.select { |square| square.coords == [current_square.column + 1, current_square.row + 1]}
       current_square = current_square[0]
       return if current_square.nil?
-      return unless current_square.piece_on_square.nil?
+      return if !current_square.piece_on_square.nil? && current_square.piece_on_square.player == @player
 
       @moves.push(current_square)
+      return unless current_square.piece_on_square.nil?
       return if king
     end
   end
@@ -83,9 +88,10 @@ module Movesets
       current_square = board.squares.select { |square| square.coords == [current_square.column + 1, current_square.row - 1]}
       current_square = current_square[0]
       return if current_square.nil?
-      return unless current_square.piece_on_square.nil?
+      return if !current_square.piece_on_square.nil? && current_square.piece_on_square.player == @player
 
       @moves.push(current_square)
+      return unless current_square.piece_on_square.nil?
       return if king
     end
   end
@@ -95,9 +101,10 @@ module Movesets
       current_square = board.squares.select { |square| square.coords == [current_square.column - 1, current_square.row + 1]}
       current_square = current_square[0]
       return if current_square.nil?
-      return unless current_square.piece_on_square.nil?
+      return if !current_square.piece_on_square.nil? && current_square.piece_on_square.player == @player
 
       @moves.push(current_square)
+      return unless current_square.piece_on_square.nil?
       return if king
     end
   end
@@ -107,9 +114,10 @@ module Movesets
       current_square = board.squares.select { |square| square.coords == [current_square.column - 1, current_square.row - 1]}
       current_square = current_square[0]
       return if current_square.nil?
-      return unless current_square.piece_on_square.nil?
+      return if !current_square.piece_on_square.nil? && current_square.piece_on_square.player == @player
 
       @moves.push(current_square)
+      return unless current_square.piece_on_square.nil?
       return if king
     end
   end

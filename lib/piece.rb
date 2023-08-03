@@ -21,8 +21,13 @@ class Piece
 
   def change_square(square)
     @current_square.no_piece
+    capture_move(square) unless square.piece_on_square.nil?
     @current_square = square
     claim_square
+  end
+
+  def capture_move(square)
+    @player.captured_piece(square.piece_on_square)
   end
 
   def claim_square

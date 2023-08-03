@@ -9,6 +9,7 @@ class Player
     @color = nil
     @pieces_in_play = []
     @pieces_with_moves = []
+    @captured_pieces = []
   end
 
   def player_name(opponent_name = nil)
@@ -61,5 +62,9 @@ class Player
       i == @pieces_with_moves.length - 1 ? print("\n") : print(' ')
       i += 1
     end
+  end
+
+  def captured_piece(piece)
+    @captured_pieces.push(piece)
   end
 end
