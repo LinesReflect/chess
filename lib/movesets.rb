@@ -18,7 +18,35 @@ module Movesets
     ]
   end
 
-  def up_moves(current_square, board, king = false)
+  def up_moves(current_square, board, pawn = false, king = false)
+    loop do
+      current_square = board.squares.select { |square| square.coords == [current_square.column, current_square.row + 1]}
+      current_square = current_square[0]
+      return if current_square.nil?
+      return if !current_square.piece_on_square.nil? && current_square.piece_on_square.player == @player
+      return if !current_square.piece_on_square.nil? && pawn
+
+      @moves.push(current_square)
+      return unless current_square.piece_on_square.nil?
+      return if king || pawn
+    end
+  end
+
+  def down_moves(current_square, board,  pawn = false, king = false)
+    loop do
+      current_square = board.squares.select { |square| square.coords == [current_square.column, current_square.row - 1]}
+      current_square = current_square[0]
+      return if current_square.nil?
+      return if !current_square.piece_on_square.nil? && current_square.piece_on_square.player == @player
+      return if !current_square.piece_on_square.nil? && pawn
+
+      @moves.push(current_square)
+      return unless current_square.piece_on_square.nil?
+      return if king || pawn
+    end
+  end
+
+  def right_moves(current_square, board, king = false)
     loop do
       current_square = board.squares.select { |square| square.coords == [current_square.column + 1, current_square.row]}
       current_square = current_square[0]
@@ -27,11 +55,11 @@ module Movesets
 
       @moves.push(current_square)
       return unless current_square.piece_on_square.nil?
-      return if king
+      return if king || pawn
     end
   end
 
-  def down_moves(current_square, board, king = false)
+  def left_moves(current_square, board, king = false)
     loop do
       current_square = board.squares.select { |square| square.coords == [current_square.column - 1, current_square.row]}
       current_square = current_square[0]
@@ -40,37 +68,11 @@ module Movesets
 
       @moves.push(current_square)
       return unless current_square.piece_on_square.nil?
-      return if king
+      return if king || pawn
     end
   end
 
-  def right_moves(current_square, board, king = false)
-    loop do
-      current_square = board.squares.select { |square| square.coords == [current_square.column, current_square.row + 1]}
-      current_square = current_square[0]
-      return if current_square.nil?
-      return if !current_square.piece_on_square.nil? && current_square.piece_on_square.player == @player
-
-      @moves.push(current_square)
-      return unless current_square.piece_on_square.nil?
-      return if king
-    end
-  end
-
-  def left_moves(current_square, board, king = false)
-    loop do
-      current_square = board.squares.select { |square| square.coords == [current_square.column, current_square.row - 1]}
-      current_square = current_square[0]
-      return if current_square.nil?
-      return if !current_square.piece_on_square.nil? && current_square.piece_on_square.player == @player
-
-      @moves.push(current_square)
-      return unless current_square.piece_on_square.nil?
-      return if king
-    end
-  end
-
-  def up_right_moves(current_square, board, king = false)
+  def up_right_moves(current_square, board, pawn = false, king = false)
     loop do
       current_square = board.squares.select { |square| square.coords == [current_square.column + 1, current_square.row + 1]}
       current_square = current_square[0]
@@ -79,24 +81,11 @@ module Movesets
 
       @moves.push(current_square)
       return unless current_square.piece_on_square.nil?
-      return if king
+      return if king || pawn
     end
   end
 
-  def up_left_moves(current_square, board, king = false)
-    loop do
-      current_square = board.squares.select { |square| square.coords == [current_square.column + 1, current_square.row - 1]}
-      current_square = current_square[0]
-      return if current_square.nil?
-      return if !current_square.piece_on_square.nil? && current_square.piece_on_square.player == @player
-
-      @moves.push(current_square)
-      return unless current_square.piece_on_square.nil?
-      return if king
-    end
-  end
-
-  def down_right_moves(current_square, board, king = false)
+  def up_left_moves(current_square, board, pawn = false, king = false)
     loop do
       current_square = board.squares.select { |square| square.coords == [current_square.column - 1, current_square.row + 1]}
       current_square = current_square[0]
@@ -105,11 +94,24 @@ module Movesets
 
       @moves.push(current_square)
       return unless current_square.piece_on_square.nil?
-      return if king
+      return if king || pawn
     end
   end
 
-  def down_left_moves(current_square, board, king = false)
+  def down_right_moves(current_square, board, pawn = false, king = false)
+    loop do
+      current_square = board.squares.select { |square| square.coords == [current_square.column + 1, current_square.row - 1]}
+      current_square = current_square[0]
+      return if current_square.nil?
+      return if !current_square.piece_on_square.nil? && current_square.piece_on_square.player == @player
+
+      @moves.push(current_square)
+      return unless current_square.piece_on_square.nil?
+      return if king || pawn
+    end
+  end
+
+  def down_left_moves(current_square, board, pawn = false, king = false)
     loop do
       current_square = board.squares.select { |square| square.coords == [current_square.column - 1, current_square.row - 1]}
       current_square = current_square[0]
@@ -118,26 +120,16 @@ module Movesets
 
       @moves.push(current_square)
       return unless current_square.piece_on_square.nil?
-      return if king
+      return if king || pawn
     end
   end
 
-  def white_pawn_moves(current_square, board)
-    if current_square.row == 2
-      move = board.squares.select { |square| square.coords == [current_square.column, 4] }
-      @moves.push(move[0])
-    end
-    move = board.squares.select { |square| square.coords == [current_square.column, current_square.row + 1] }
-    @moves.push(move[0])
-  end
+  def pawn_double_move(current_square, board)
+    return unless [2, 7].include?(current_square.row)
 
-  def black_pawn_moves(current_square, board)
-    if current_square.row == 7
-      move = board.squares.select { |square| square.coords == [current_square.column, 5] }
-      @moves.push(move[0])
-    end
-    move = board.squares.select { |square| square.coords == [current_square.column, current_square.row - 1] }
-    @moves.push(move[0])
+    new_row = current_square.row == 2 ? 4 : 5
+    move = board.squares.select { |square| square.coords == [current_square.column, new_row] }
+    @moves.push(move[0]) if move[0].piece_on_square.nil?
   end
 
   def knight_moves(start_square, board)
