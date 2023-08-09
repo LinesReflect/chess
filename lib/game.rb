@@ -3,6 +3,7 @@
 require_relative 'board'
 require_relative 'player'
 require_relative 'piece_creator'
+require_relative 'king'
 require 'colorize'
 
 class Game
@@ -15,6 +16,7 @@ class Game
     @player2 = player2
     @board = board
     @player_turn = nil
+    @enemy_player = nil
     @turn_number = 1
     @checkmate = false
   end
@@ -32,22 +34,35 @@ class Game
   def run_game
     loop do
       change_turn
-      puts @turn_number
+      puts "Turn ##{@turn_number}"
       puts "#{@player_turn.name}'s turn!"
       @board.display_board
-      player_move_piece
+      in_check? ? player_move_check : player_move_piece
     end
   end
 
+  def player_move_check
+  end
+
   def player_move_piece
-    puts choose_piece_to_move
     @player_turn.possible_moves(@board)
+    puts choose_piece_to_move
+    @player_turn.print_moves
     moving_piece = @player_turn.pieces_with_moves[number_input]
     @board.display_board(moving_piece.moves)
     moving_piece.print_moves
     puts choose_where_to_move
     new_square = moving_piece.moves[number_input]
     moving_piece.change_square(new_square)
+  end
+
+  def in_check?
+    @enemy_player.possible_moves(@board)
+    check_moves = []
+    @enemy_player.pieces_with_moves.map { |piece| piece.moves.map { |move| check_moves.push(move) if move.piece_on_square.instance_of?(King) }}
+    return true unless check_moves.empty?
+
+    false
   end
 
   def number_input
@@ -66,9 +81,11 @@ class Game
   end
 
   def change_turn
-    return @player_turn = @player1.color == 'white' ? @player1 : @player2 if @player_turn.nil?
+    @player_turn = @player1.color == 'white' ? @player1 : @player2 if @player_turn.nil?
+    return @enemy_player = @player_turn == @player1 ? @player2 : @player1 if @enemy_player.nil?
 
     @player_turn = @player_turn == @player1 ? @player2 : @player1
+    @enemy_player = @player_turn == @player1 ? @player2 : @player1
     @turn_number += 1
   end
 
