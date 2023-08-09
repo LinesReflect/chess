@@ -55,7 +55,7 @@ module Movesets
 
       @moves.push(current_square)
       return unless current_square.piece_on_square.nil?
-      return if king || pawn
+      return if king
     end
   end
 
@@ -68,7 +68,7 @@ module Movesets
 
       @moves.push(current_square)
       return unless current_square.piece_on_square.nil?
-      return if king || pawn
+      return if king
     end
   end
 

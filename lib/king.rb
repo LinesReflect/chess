@@ -11,11 +11,11 @@ class King < Piece
     clear_moves
     up_moves(current_square, board, false, true)
     up_right_moves(current_square, board, false, true)
-    right_moves(current_square, board, false, true)
+    right_moves(current_square, board, true)
     down_right_moves(current_square, board, false, true)
     down_moves(current_square, board, false, true)
     down_left_moves(current_square, board, false, true)
-    left_moves(current_square, board, false, true)
+    left_moves(current_square, board, true)
     up_left_moves(current_square, board, false, true)
   end
 end
