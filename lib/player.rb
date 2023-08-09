@@ -52,7 +52,6 @@ class Player
       next if piece.moves.empty?
       @pieces_with_moves.push(piece)
     end
-    print_moves
   end
 
   def print_moves
