@@ -144,4 +144,10 @@ module Movesets
       i += 1
     end
   end
+
+  def can_check?
+    return true if @moves.any? { |move| move.piece_on_square.instance_of?(King) }
+
+    false
+  end
 end

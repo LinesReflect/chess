@@ -18,7 +18,7 @@ class Game
     @player_turn = nil
     @enemy_player = nil
     @turn_number = 1
-    @checkmate = false
+    @check = false
   end
 
   def game_setup
@@ -37,17 +37,34 @@ class Game
       puts "Turn ##{@turn_number}"
       puts "#{@player_turn.name}'s turn!"
       @board.display_board
-      in_check? ? player_move_check : player_move_piece
+      find_enemy_moves
+      in_check?(@enemy_player.all_moves) ? remove_check_move : normal_move
+      break if checkmate?
     end
+    puts "Checkmate"
+    puts "#{@enemy_player} WINS!"
   end
 
-  def player_move_check
+  def normal_move
+    @player_turn.find_pinned_pieces(@board, @enemy_player)
+    @player_turn.possible_moves(@board, find_enemy_moves)
+    player_move_piece
+  end
+
+  def remove_check_move
+    puts 'Check'
+    @check = true
+    @player_turn.find_pinned_pieces(@board, @enemy_player, check_piece)
+    player_check_breakers
+    return if empty_moves?
+
+    player_move_piece
+    @check = false
   end
 
   def player_move_piece
-    @player_turn.possible_moves(@board)
     puts choose_piece_to_move
-    @player_turn.print_moves
+    @player_turn.print_moves(@player_turn.pieces_with_moves)
     moving_piece = @player_turn.pieces_with_moves[number_input]
     @board.display_board(moving_piece.moves)
     moving_piece.print_moves
@@ -56,13 +73,30 @@ class Game
     moving_piece.change_square(new_square)
   end
 
-  def in_check?
-    @enemy_player.possible_moves(@board)
-    check_moves = []
-    @enemy_player.pieces_with_moves.map { |piece| piece.moves.map { |move| check_moves.push(move) if move.piece_on_square.instance_of?(King) }}
-    return true unless check_moves.empty?
+  def checkmate?
+    return true if @check
 
     false
+  end
+
+  def in_check?(enemy_moves)
+    return true if @player_turn.getting_checked?(enemy_moves)
+
+    false
+  end
+
+  def empty_moves?
+    return true if @player_turn.pieces_with_moves.empty?
+
+    false
+  end
+
+  def player_check_breakers
+    @player_turn.find_check_breakers(@board, @enemy_player, check_piece, find_enemy_moves)
+  end
+
+  def check_piece
+    @enemy_player.pieces_with_moves.select { |piece| piece.checking_enemy_king? }[0]
   end
 
   def number_input
@@ -87,6 +121,11 @@ class Game
     @player_turn = @player_turn == @player1 ? @player2 : @player1
     @enemy_player = @player_turn == @player1 ? @player2 : @player1
     @turn_number += 1
+  end
+
+  def find_enemy_moves
+    @turn_number == 1 ? @enemy_player.possible_moves(@board) : @enemy_player.possible_moves(@board)
+    @enemy_player.all_moves
   end
 
   def game_greeting
