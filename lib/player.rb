@@ -53,7 +53,7 @@ class Player
     @pieces_in_play.each do |piece|
       next if @pinned_pieces.include?(piece)
 
-      piece.find_moves(piece.current_square, board, enemy_moves)
+      piece.piece_name == 'King' ? piece.find_moves(piece.current_square, board, enemy_moves) : piece.find_moves(piece.current_square, board)
       next if piece.moves.empty?
 
       @pieces_with_moves.push(piece)
