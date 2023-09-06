@@ -8,7 +8,7 @@ class Bishop < Piece
   end
 
   def find_moves(current_square, board)
-    clear_moves
+    @moves.clear
     up_right_moves(current_square, board)
     up_left_moves(current_square, board)
     down_right_moves(current_square, board)

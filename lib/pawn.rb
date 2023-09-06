@@ -8,7 +8,7 @@ class Pawn < Piece
   end
 
   def find_moves(current_square, board)
-    clear_moves
+    @moves.clear
     @color == 'white' ? find_white_moves(current_square, board) : find_black_moves(current_square, board)
   end
 

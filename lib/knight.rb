@@ -8,7 +8,7 @@ class Knight < Piece
   end
 
   def find_moves(current_square, board)
-    clear_moves
+    @moves.clear
     knight_moves(current_square, board)
   end
 end

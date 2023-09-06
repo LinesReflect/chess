@@ -8,7 +8,7 @@ class Rook < Piece
   end
 
   def find_moves(current_square, board)
-    clear_moves
+    @moves.clear
     up_moves(current_square, board)
     down_moves(current_square, board)
     right_moves(current_square, board)

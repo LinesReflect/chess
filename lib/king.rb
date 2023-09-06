@@ -7,8 +7,8 @@ class King < Piece
     color == 'white' ? '♚' : '♔'
   end
 
-  def find_moves(current_square, board)
-    clear_moves
+  def find_moves(current_square, board, enemy_moves)
+    @moves.clear
     up_moves(current_square, board, false, true)
     up_right_moves(current_square, board, false, true)
     right_moves(current_square, board, true)
@@ -17,5 +17,10 @@ class King < Piece
     down_left_moves(current_square, board, false, true)
     left_moves(current_square, board, true)
     up_left_moves(current_square, board, false, true)
+    remove_moves_into_check(enemy_moves)
+  end
+
+  def remove_moves_into_check(enemy_moves)
+    @moves.reject! { |move| enemy_moves.include?(move) } unless enemy_moves.nil?
   end
 end
