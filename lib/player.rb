@@ -118,6 +118,8 @@ class Player
 
   def getting_checked?(enemy_moves)
     return true if enemy_moves.any? { |move| move.piece_on_square.instance_of?(King)}
+
+    false
   end
 
   def checking_enemy?
@@ -133,5 +135,11 @@ class Player
   def captured_piece(piece, enemy_player)
     remove_piece_from_play(piece, enemy_player)
     @captured_pieces.push(piece)
+  end
+
+  def rooks_for_castle
+    rook_arr = @pieces_in_play.select { |piece| piece.piece_name == 'Rook' }
+    rook_arr.reject! { |rook| rook.first_move == false }
+    rook_arr.reject! { |rook| rook.moves.none? { |move| move.column == 4 || move.column == 6}}
   end
 end

@@ -70,7 +70,7 @@ class Game
     moving_piece.print_moves
     puts choose_where_to_move
     new_square = moving_piece.moves[number_input]
-    moving_piece.change_square(new_square)
+    moving_piece.change_square(new_square, @board)
   end
 
   def checkmate?
