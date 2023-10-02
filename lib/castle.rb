@@ -5,7 +5,6 @@ require_relative 'board'
 require_relative 'square'
 
 module Castle
-
   def king_castle(current_square, rook_arr, board)
     return if rook_arr.nil?
 
@@ -23,7 +22,7 @@ module Castle
     rook.change_square(square, board)
   end
 
-  def find_rook(king_square, rook_arr, board)
+  def find_rook(king_square, rook_arr)
     rook_current_column = king_square.column == 3 ? 1 : 8
     rook_arr.select { |rook| rook.current_square.column == rook_current_column }[0]
   end
