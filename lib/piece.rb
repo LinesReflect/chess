@@ -22,7 +22,7 @@ class Piece
     @remove_check_moves = []
   end
 
-  def change_square(square)
+  def change_square(square, board)
     capture_move(square) unless square.piece_on_square.nil?
     current_square_remove_piece
     @current_square = square
