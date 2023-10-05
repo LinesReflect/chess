@@ -40,6 +40,7 @@ class Game
       find_enemy_moves
       in_check?(@enemy_player.all_moves) ? remove_check_move : normal_move
       break if checkmate?
+      reset_en_passant
     end
     puts "Checkmate"
     puts "#{@enemy_player} WINS!"
@@ -148,5 +149,11 @@ class Game
 
   def choose_where_to_move
     'Type the number of the square that you want to move to. '
+  end
+
+  def reset_en_passant
+    @enemy_player.player_pawns.map do |pawn|
+      pawn.remove_en_passant
+    end
   end
 end

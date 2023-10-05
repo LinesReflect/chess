@@ -142,4 +142,8 @@ class Player
     rook_arr.reject! { |rook| rook.first_move == false }
     rook_arr.reject! { |rook| rook.moves.none? { |move| move.column == 4 || move.column == 6}}
   end
+
+  def player_pawns
+    @pieces_in_play.select { |piece| piece.instance_of? Pawn}
+  end
 end
