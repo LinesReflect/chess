@@ -5,11 +5,13 @@ require_relative 'player'
 require_relative 'piece_creator'
 require_relative 'king'
 require 'colorize'
+require_relative 'save_load'
 
 class Game
   attr_reader :board, :player1
 
   include PieceCreator
+  include SaveLoad
 
   def initialize(player1 = Player.new(1), player2 = Player.new(2), board = Board.new)
     @player1 = player1
@@ -21,7 +23,7 @@ class Game
     @check = false
   end
 
-  def game_setup
+  def new_game_setup
     game_greeting
     player_names
     player_colors
@@ -34,8 +36,7 @@ class Game
   def run_game
     loop do
       change_turn
-      puts "Turn ##{@turn_number}"
-      puts "#{@player_turn.name}'s turn!"
+      display_turn_info
       @board.display_board
       find_enemy_moves
       in_check?(@enemy_player.all_moves) ? remove_check_move : normal_move
@@ -66,12 +67,17 @@ class Game
   def player_move_piece
     puts choose_piece_to_move
     @player_turn.print_moves(@player_turn.pieces_with_moves)
-    moving_piece = @player_turn.pieces_with_moves[number_input]
+    moving_piece = @player_turn.pieces_with_moves[user_input]
     @board.display_board(moving_piece.moves)
     moving_piece.print_moves
     puts choose_where_to_move
-    new_square = moving_piece.moves[number_input]
+    new_square = moving_piece.moves[user_input]
     moving_piece.change_square(new_square, @board)
+  end
+
+  def display_turn_info
+    puts "Turn ##{@turn_number}"
+    puts "#{@player_turn.name}'s turn!"
   end
 
   def checkmate?
@@ -100,12 +106,18 @@ class Game
     @enemy_player.pieces_with_moves.select { |piece| piece.checking_enemy_king? }[0]
   end
 
-  def number_input
+  def user_input
     loop do
-      number = gets.chomp.to_i
-      return number - 1 if valid_number_input?(number, @player_turn)
+      input = gets.chomp
+      return input.to_i - 1 if valid_number_input?(input.to_i, @player_turn)
 
-      puts 'Not a valid input. Just enter an approriate number e.g 1, 2, 3.'
+      if input == 'SAVE'
+        save_game
+        puts choose_piece_to_move
+        @player_turn.print_moves(@player_turn.pieces_with_moves)
+      else
+        puts 'Not a valid input. Enter an approriate number e.g 1, 2, 3.'
+      end
     end
   end
 
@@ -144,7 +156,7 @@ class Game
   end
 
   def choose_piece_to_move
-    "#{@player_turn.name}, please type the number of the piece that you want to move."
+    "#{@player_turn.name}, please type the number of the piece that you want to move, or type 'SAVE' to save the game."
   end
 
   def choose_where_to_move
