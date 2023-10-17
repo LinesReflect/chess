@@ -1,9 +1,13 @@
 # frozen_string_literal: true
 
-require 'json'
+require 'yaml'
 require 'date'
 
 module SaveLoad
+  def save_data
+    @data = {}
+  end
+
   def create_folder
     Dir.chdir(Dir.pwd) do
       Dir.mkdir('saved_games') unless Dir.exist?('saved_games')
@@ -22,12 +26,13 @@ module SaveLoad
 
   def filename
     puts 'Enter a name for your game file'
-    format_filename(gets.chomp).concat(current_date_time)
+    format_filename(gets.chomp).concat(current_date_time).concat('.yml')
   end
 
   def format_filename(name)
     name.gsub!(/[!:*?"<>|]/, '_')
     name.gsub!("/", '_')
+    name.gsub!(' ', '_')
   end
 
   def current_date_time
