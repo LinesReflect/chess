@@ -8,7 +8,7 @@ require 'colorize'
 require_relative 'save_load'
 
 class Game
-  attr_reader :board, :player1
+  attr_reader :board, :player1, :player2, :player_turn, :enemy_player, :turn_number, :check
 
   include PieceCreator
   include SaveLoad
@@ -30,6 +30,18 @@ class Game
     puts "#{@player1.name} will control #{@player1.color} pieces and #{@player2.name} controls the #{@player2.color} pieces."
     create_pieces(@player1)
     create_pieces(@player2)
+    run_game
+  end
+
+  def load_game_setup
+    return no_saved_games unless saved_files_arr
+
+    restore_game_data(load_game)
+    puts 'Welcome back!'
+    display_turn_info
+    @board.display_board
+    in_check?(@enemy_player.all_moves) ? remove_check_move : normal_move
+    reset_en_passant
     run_game
   end
 
@@ -139,6 +151,11 @@ class Game
   def find_enemy_moves
     @turn_number == 1 ? @enemy_player.possible_moves(@board) : @enemy_player.possible_moves(@board)
     @enemy_player.all_moves
+  end
+
+  def no_saved_games
+    puts 'Looks like you do not have any saved games. How about we start a new one.'
+    Game.new.new_game_setup
   end
 
   def game_greeting
