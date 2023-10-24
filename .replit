@@ -1,0 +1,5 @@
+language = 'ruby'
+run = "bundle exec ruby lib/main.rb"
+
+[deployment]
+run = ["sh", "-c", "bundle exec ruby lib/main.rb"]
